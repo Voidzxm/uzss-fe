@@ -1,13 +1,13 @@
 <template>
-    <div class="dashboard-panel is-one-fifth" :style="{flex: width}">
-      <div class="dashboard-logo">
-        <a href="/" >
-          <img src="../../assets/logo.png" alt="logo">
-          <h1 v-if="! foldorNot">Mozx Design</h1>
-        </a>
+  <div class="dashboard-panel is-one-fifth" :style="{flex: width}" id="left-slider">
+    <div class="dashboard-logo">
+      <a href="/" >
+        <img src="../../assets/logo.png" alt="logo">
+        <h1 v-if="! foldorNot">Mozx Design</h1>
+      </a>
 
-      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -24,18 +24,21 @@ export default {
   },
   methods: {
     // TweenJs 动画监听
-    tween: function (startValue, endValue) {
-      var vm = this
+    tween: function (swidth, ewidth) {
+      let s = document.getElementById('left-slider')
       function animate () {
-        if (TWEEN.update()) {
+        requestAnimationFrame(animate)
+        TWEEN.update()
+        /* if (TWEEN.update()) {
           requestAnimationFrame(animate)
-        }
+        } */
       }
 
-      new TWEEN.Tween({ tweeningValue: startValue })
-        .to({ tweeningValue: endValue }, 500)
-        .onUpdate(function (object) {
-          vm.tweeningValue = object.tweeningValue.toFixed(0)
+      new TWEEN.Tween({ flex: swidth })
+        .to({ flex: ewidth }, 2500)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(function () {
+          s.style.setProperty('flex', ewidth)
         })
         .start()
 
@@ -46,9 +49,11 @@ export default {
     foldorNot: function () {
       console.log('foldorNot: ' + this.foldorNot)
       if (this.foldorNot) {
-        this.width = '0 0 6%'
+        // this.width = '0 0 6%'
+        this.tween('0 0 20%', '0 0 6%')
       } else {
-        this.width = '0 0 20%'
+        // this.width = '0 0 20%'
+        this.tween('0 0 6%', '0 0 20%')
       }
     }
   },
@@ -73,6 +78,7 @@ export default {
     background-color: rgb(0, 21, 41);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     z-index: 10;
+    flex: 0 0 20%;
   }
  .dashboard-panel.is-one-fifth
   {
