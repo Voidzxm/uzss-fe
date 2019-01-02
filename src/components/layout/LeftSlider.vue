@@ -5,7 +5,9 @@
         <img src="../../assets/logo.png" alt="logo">
         <h1 v-if="! foldorNot">Mozx Design</h1>
       </a>
-
+    </div>
+    <div>
+      <LeftSliderMenu></LeftSliderMenu>
     </div>
   </div>
 </template>
@@ -13,13 +15,15 @@
 <script>
 import Bus from '../../assets/eventBus.js'
 import TWEEN from '@tweenjs/tween.js'
+import LeftSliderMenu from '../child-components/LeftSliderMenu'
 
 export default {
   name: 'LeftSlider',
+  components: {LeftSliderMenu},
   data () {
     return {
       foldorNot: false,
-      width: '0 0 20%'
+      width: '0 0 256px'
     }
   },
   methods: {
@@ -35,7 +39,7 @@ export default {
       }
 
       new TWEEN.Tween({ flex: swidth })
-        .to({ flex: ewidth }, 2500)
+        .to({ flex: ewidth }, 500)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function () {
           s.style.setProperty('flex', ewidth)
@@ -50,10 +54,10 @@ export default {
       console.log('foldorNot: ' + this.foldorNot)
       if (this.foldorNot) {
         // this.width = '0 0 6%'
-        this.tween('0 0 20%', '0 0 6%')
+        this.tween('0 0  256px', '0 0 64px')
       } else {
-        // this.width = '0 0 20%'
-        this.tween('0 0 6%', '0 0 20%')
+        // this.width = '0 0  256px'
+        this.tween('0 0 64px', '0 0  256px')
       }
     }
   },
@@ -73,16 +77,16 @@ export default {
     display: flex;
     flex-direction: column;
     /*padding: 1.5rem 1.5rem;*/
-    flex: 0 0 25rem;
+    /*flex: 0 0 25rem;*/
     height: 100%;
     background-color: rgb(0, 21, 41);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     z-index: 10;
-    flex: 0 0 20%;
+    flex: 0 0 256px;
   }
  .dashboard-panel.is-one-fifth
   {
-    min-width: 5rem;
+    min-width: 4rem;
   }
   .dashboard-logo
   {

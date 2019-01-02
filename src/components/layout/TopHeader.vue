@@ -36,12 +36,6 @@
           <dropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="lanDropDown" :style="{left: lanDropDownLeft + 'px'}"></dropdownList>
         </transition>
       </div>
-      <!--<span class="tool-parent-container" @mouseenter="lanDropDown = true" @mouseleave="lanDropDown = false">
-        <font-awesome-icon icon="globe" class="right-tool"/>
-        <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-            <dropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="lanDropDown"></dropdownList>
-        </transition>
-      </span>-->
     </div>
   </div>
 </template>
