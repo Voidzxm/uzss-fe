@@ -3,11 +3,11 @@
     <div class="dashboard-logo">
       <a href="/" >
         <img src="../../assets/logo.png" alt="logo">
-        <h1 v-if="! foldorNot">Mozx Design</h1>
+        <h1 v-if="! folderNot">Mozx Design</h1>
       </a>
     </div>
     <div>
-      <LeftSliderMenu></LeftSliderMenu>
+      <LeftSliderMenu :menudata="menudata"></LeftSliderMenu>
     </div>
   </div>
 </template>
@@ -22,8 +22,31 @@ export default {
   components: {LeftSliderMenu},
   data () {
     return {
-      foldorNot: false,
-      width: '0 0 256px'
+      folderNot: false,
+      width: '0 0 256px',
+      menudata: [{
+        'id': 1,
+        'name': 'Dashboard',
+        'icon': 'tachometer-alt',
+        'secondClass': [{
+          'name': 'Members1'
+        }, {
+          'name': 'Members2'
+        }, {
+          'name': 'Members3'
+        }]
+      }, {
+        'id': 2,
+        'name': 'Dashboard2',
+        'icon': 'tachometer-alt',
+        'secondClass': [{
+          'name': 'Members4'
+        }, {
+          'name': 'Members5'
+        }, {
+          'name': 'Members6'
+        }]
+      }]
     }
   },
   methods: {
@@ -50,9 +73,9 @@ export default {
     }
   },
   watch: {
-    foldorNot: function () {
-      console.log('foldorNot: ' + this.foldorNot)
-      if (this.foldorNot) {
+    folderNot: function () {
+      console.log('folderNot: ' + this.folderNot)
+      if (this.folderNot) {
         // this.width = '0 0 6%'
         this.tween('0 0  256px', '0 0 64px')
       } else {
@@ -64,7 +87,7 @@ export default {
   mounted: function () {
     let that = this
     Bus.$on('msg', (e) => {
-      that.foldorNot = !that.foldorNot
+      that.folderNot = !that.folderNot
     })
   }
 }

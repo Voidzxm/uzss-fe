@@ -1,29 +1,29 @@
 <template>
 <div>
-  <ul class="ul-parent">
-    <li>
-      <div v-if="foldorNot" class="menu-container">
+  <ul class="menu-list ul-parent" v-for="item in menudata" :key="item.id">
+    <li class="li-parent" @click="clickFirst(item)">
+      <div v-if="folderNot" class="menu-container">
         <span class="icon-span-parent">
           <span class="icon-span" style="font-size: 14px;">
-            <font-awesome-icon icon="tachometer-alt"/>
+            <font-awesome-icon :icon="item.icon"/>
           </span>
         </span>
       </div>
-      <div v-if="! foldorNot" class="menu-container">
+      <div v-if="! folderNot" class="menu-container">
         <span class="icon-span-parent" style="float:left;">
           <span class="icon-span">
             <font-awesome-icon icon="tachometer-alt"/>
           </span>
-          <span class="menu-name-span">Dashboard</span>
+          <span class="menu-name-span">{{item.name}}</span>
         </span>
         <span class="angle-span">
           <font-awesome-icon  icon="angle-down"/>
         </span>
       </div>
-      <ul>
-        <li><a>Members</a></li>
-        <li><a>Plugins</a></li>
-        <li><a>Add a member</a></li>
+      <ul class="menu-list" v-if="item.secondClass.length >= 0 && expandLi === item.name">
+        <li v-if="! folderNot" class="li-child" :class="{'is-active': activedNode === second.name }" @click="clickSecond(second)" v-for="second in item.secondClass" :key="item.id + second.name">
+          <a :class="{'is-active': activedNode === second.name }">{{second.name}}</a>
+        </li>
       </ul>
     </li>
   </ul>
@@ -35,16 +35,36 @@ import Bus from '../../assets/eventBus.js'
 
 export default {
   name: 'LeftSliderMenu',
+  props: [ 'menudata' ],
   data () {
     return {
-      foldorNot: false
+      folderNot: false,
+      isActive: '',
+      activedNode: null,
+      expandLi: ''
     }
   },
   mounted: function () {
     let that = this
     Bus.$on('msg', (e) => {
-      that.foldorNot = !that.foldorNot
+      that.folderNot = !that.folderNot
     })
+  },
+  methods: {
+    clickFirst: function (item) {
+      if (item.hideSecond === undefined) {
+        item.hideSecond = false
+      } else {
+        item.hideSecond = !item.hideSecond
+      }
+      if (!item.hideSecond) {
+        this.expandLi = item.name
+      }
+      console.log('item.hideSecond: ' + item.hideSecond)
+    },
+    clickSecond: function (second) {
+      this.activedNode = second.name
+    }
   }
 }
 </script>
@@ -55,13 +75,17 @@ export default {
     line-height: 40px;
     height: 40px;
   }
-  li {
+  .li-parent {
     background-color: transparent;
-    color: #fff;
+    color: paleturquoise;
   }
-  ul {
+  .li-parent:hover {
+    cursor: pointer;
+    color: white;
+  }
+  .ul-parent {
     width: 100%;
-    padding: 5px;
+    padding: 0;
   }
   .icon-span {
     padding: 10px;
@@ -71,11 +95,34 @@ export default {
     padding: 10px;
   }
   .angle-span {
-    font-size: 6px;
+    font-size: 8px;
     float: right;
     padding: 10px;
   }
   .menu-name-span {
     font-size: 14px;
+  }
+  .menu-list {
+    border-left: 0px solid #dbdbdb;
+    line-height: 30px;
+    float: left;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .li-child a{
+    text-align: left;
+    width: 100%;
+    padding-left: 50px;
+    font-size: 14px;
+    color: paleturquoise;
+  }
+  .li-child a:hover{
+    background-color: transparent;
+    color: white;
+  }
+  .is-active {
+    color: white;
+    background-color: #3273dc;
   }
 </style>

@@ -32,7 +32,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e;
+    /*color: #2c3e;*/
     background-color: rgb(240, 242, 245);
     /*去除html双击后选中有蓝色背景*/
     -moz-user-select: none; /*火狐*/
