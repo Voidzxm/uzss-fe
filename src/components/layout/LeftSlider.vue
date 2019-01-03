@@ -1,15 +1,15 @@
 <template>
-  <div class="dashboard-panel is-one-fifth" :style="{flex: width}" id="left-slider">
-    <div class="dashboard-logo">
-      <a href="/" >
-        <img src="../../assets/logo.png" alt="logo">
-        <h1 v-if="! folderNot">Mozx Design</h1>
-      </a>
-    </div>
-    <div>
-      <LeftSliderMenu :menudata="menudata"></LeftSliderMenu>
-    </div>
+<div class="dashboard-panel is-one-fifth" :style="{flex: width}" id="left-slider" >
+  <div class="dashboard-logo">
+    <a href="/" >
+      <img src="../../assets/logo.png" alt="logo">
+      <h1 v-if="! folderNot">Mozx Design</h1>
+    </a>
   </div>
+  <div>
+    <LeftSliderMenu :menudata="menudata"></LeftSliderMenu>
+  </div>
+</div>
 </template>
 
 <script>
@@ -25,25 +25,31 @@ export default {
       folderNot: false,
       width: '0 0 256px',
       menudata: [{
-        'id': 1,
+        'id': 100,
         'name': 'Dashboard',
         'icon': 'tachometer-alt',
         'secondClass': [{
+          'id': 100,
           'name': 'Members1'
         }, {
+          'id': 101,
           'name': 'Members2'
         }, {
+          'id': 102,
           'name': 'Members3'
         }]
       }, {
-        'id': 2,
+        'id': 101,
         'name': 'Dashboard2',
         'icon': 'tachometer-alt',
         'secondClass': [{
+          'id': 100,
           'name': 'Members4'
         }, {
+          'id': 101,
           'name': 'Members5'
         }, {
+          'id': 102,
           'name': 'Members6'
         }]
       }]
@@ -51,21 +57,18 @@ export default {
   },
   methods: {
     // TweenJs 动画监听
-    tween: function (swidth, ewidth) {
-      let s = document.getElementById('left-slider')
+    tween: function (object, property, from, to, duration, other) {
       function animate () {
-        requestAnimationFrame(animate)
-        TWEEN.update()
-        /* if (TWEEN.update()) {
+        if (TWEEN.update()) {
           requestAnimationFrame(animate)
-        } */
+        }
       }
-
-      new TWEEN.Tween({ flex: swidth })
-        .to({ flex: ewidth }, 500)
+      // let coors = swidth
+      new TWEEN.Tween(from)
+        .to(to, duration)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function () {
-          s.style.setProperty('flex', ewidth)
+          object.style.setProperty(property, other + from.x + 'px')
         })
         .start()
 
@@ -74,14 +77,17 @@ export default {
   },
   watch: {
     folderNot: function () {
-      console.log('folderNot: ' + this.folderNot)
+      let s = document.getElementById('left-slider')
+      let from
+      let to
       if (this.folderNot) {
-        // this.width = '0 0 6%'
-        this.tween('0 0  256px', '0 0 64px')
+        from = { x: 256, y: 0 }
+        to = {x: 64, y: 0}
       } else {
-        // this.width = '0 0  256px'
-        this.tween('0 0 64px', '0 0  256px')
+        from = { x: 64, y: 0 }
+        to = {x: 256, y: 0}
       }
+      this.tween(s, 'flex', from, to, 120, '0 0 ')
     }
   },
   mounted: function () {
@@ -106,6 +112,8 @@ export default {
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     z-index: 10;
     flex: 0 0 256px;
+    -webkit-transition: max-height .3s;
+    transition: max-height .3s;
   }
  .dashboard-panel.is-one-fifth
   {
