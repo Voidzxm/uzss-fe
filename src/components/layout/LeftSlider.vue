@@ -24,6 +24,7 @@ export default {
     return {
       folderNot: false,
       width: '0 0 256px',
+      expanded: false,
       menudata: [{
         'id': 100,
         'name': 'Dashboard',
@@ -52,6 +53,34 @@ export default {
           'id': 102,
           'name': 'Members6'
         }]
+      }, {
+        'id': 102,
+        'name': 'Dashboard3',
+        'icon': 'tachometer-alt',
+        'secondClass': [{
+          'id': 100,
+          'name': 'Members7'
+        }, {
+          'id': 101,
+          'name': 'Members8'
+        }, {
+          'id': 102,
+          'name': 'Members9'
+        }]
+      }, {
+        'id': 103,
+        'name': 'Dashboard4',
+        'icon': 'tachometer-alt',
+        'secondClass': [{
+          'id': 100,
+          'name': 'Members10'
+        }, {
+          'id': 101,
+          'name': 'Members11'
+        }, {
+          'id': 102,
+          'name': 'Members12'
+        }]
       }]
     }
   },
@@ -69,8 +98,11 @@ export default {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function () {
           object.style.setProperty(property, other + from.x + 'px')
-        })
-        .start()
+        }).onStop(function (object) {
+          if (from.x < to.x) {
+            Bus.$emit('expanded', '')
+          }
+        }).start()
 
       animate()
     }

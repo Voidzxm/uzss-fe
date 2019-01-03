@@ -21,7 +21,7 @@
           <font-awesome-icon  icon="angle-up" v-else/>
         </span>
         </div>
-      <div v-if="! folderNot">
+      <div v-if="! expanded">
       <transition
         name="slide-fade">
       <ul class="menu-list second-menu-list" v-if="item.secondClass.length >= 0 && expandLi === item.name && ! folderNot">
@@ -48,7 +48,8 @@ export default {
       isActive: '',
       activeNode: null,
       activeParent: null,
-      expandLi: ''
+      expandLi: '',
+      expanded: null
     }
   },
   mounted: function () {
@@ -56,10 +57,15 @@ export default {
     Bus.$on('msg', (e) => {
       that.folderNot = !that.folderNot
     })
+    Bus.$on('expanded', (e) => {
+      that.expanded = true
+    })
   },
   methods: {
     clickFirst: function (item) {
       this.expandLi = this.expandLi === item.name ? '' : item.name
+      let activeAnchor = this.$el.querySelector('.li-child')
+      console.log(activeAnchor)
     },
     clickSecond: function (item, second) {
       this.activeNode = second.name
@@ -139,11 +145,12 @@ export default {
     transition: all .2s linear .0s;
   }
   .slide-fade-leave-active {
-   /* transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0) .15s;*/
-    transition: all .1s ease-in-out .0s;
+   /* transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0) .15s; ease-in-out*/
+    transition: all .1s  ease-out .0s;
   }
   .slide-fade-enter, .slide-fade-leave-to {
     transform: translateY(-20px);
+    height: 0;
     opacity: 0;
   }
 </style>
