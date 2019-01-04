@@ -1,6 +1,6 @@
 <template>
 <div>
-  <ul class="menu-list ul-parent" v-for="item in menudata" :key="item.id">
+  <ul class="menu-list ul-parent" v-for="item in menudata" :key="item.id" style="white-space: nowrap;">
     <li class="li-parent" :class="{'li-parent-active': activeParent === item.name }">
       <div v-if="folderNot" class="menu-container">
         <span class="icon-span-parent">
@@ -16,21 +16,24 @@
           </span>
           <span class="menu-name-span">{{item.name}}</span>
         </span>
-          <span class="angle-span">
+        <span class="angle-span">
           <font-awesome-icon  icon="angle-down" v-if="expandLi !== item.name"/>
           <font-awesome-icon  icon="angle-up" v-else/>
         </span>
-        </div>
-      <div v-if="! expanded">
+      </div>
       <transition
         name="slide-fade">
-      <ul class="menu-list second-menu-list" v-if="item.secondClass.length >= 0 && expandLi === item.name && ! folderNot">
-        <li v-if="! folderNot" class="li-child" :class="{'is-active': activeNode === second.name }" @click="clickSecond(item, second)" v-for="second in item.secondClass" :key="item.id + second.id">
-          <a :class="{'is-active a': activeNode === second.name }">{{second.name}}</a>
-        </li>
-      </ul>
+        <div v-if="expanded">
+          <transition
+            name="slide-fade">
+            <ul class="menu-list second-menu-list" v-if="item.secondClass.length >= 0 && expandLi === item.name && ! folderNot">
+              <li v-if="! folderNot" class="li-child" :class="{'is-active': activeNode === second.name }" @click="clickSecond(item, second)" v-for="second in item.secondClass" :key="item.id + second.id">
+                <a :class="{'is-active a': activeNode === second.name }">{{second.name}}</a>
+              </li>
+            </ul>
+          </transition>
+        </div>
       </transition>
-      </div>
     </li>
   </ul>
 </div>
@@ -49,7 +52,8 @@ export default {
       activeNode: null,
       activeParent: null,
       expandLi: '',
-      expanded: null
+      expanded: null,
+      isReady: true
     }
   },
   mounted: function () {
@@ -58,14 +62,31 @@ export default {
       that.folderNot = !that.folderNot
     })
     Bus.$on('expanded', (e) => {
+      console.log('get expanded' + that.isReady)
+      if (!that.folderNot) {
+        that.isReady = true
+        console.log('I am ready , show me')
+      } else {
+        that.isReady = false
+      }
       that.expanded = true
     })
+  },
+  watch: {
+    folderNot: function () {
+      console.log('folderNot: ' + this.folderNot)
+      if (this.folderNot) {
+        this.expanded = false
+        this.isReady = false
+      }
+    },
+    isReady: function () {
+      console.log('isReady: ' + this.isReady)
+    }
   },
   methods: {
     clickFirst: function (item) {
       this.expandLi = this.expandLi === item.name ? '' : item.name
-      let activeAnchor = this.$el.querySelector('.li-child')
-      console.log(activeAnchor)
     },
     clickSecond: function (item, second) {
       this.activeNode = second.name
@@ -152,5 +173,6 @@ export default {
     transform: translateY(-20px);
     height: 0;
     opacity: 0;
+    transition: all .1s;
   }
 </style>

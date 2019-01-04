@@ -1,9 +1,9 @@
 <template>
 <div class="dashboard-panel is-one-fifth" :style="{flex: width}" id="left-slider" >
   <div class="dashboard-logo">
-    <a href="/" >
+    <a href="/" style="white-space: nowrap;">
       <img src="../../assets/logo.png" alt="logo">
-      <h1 v-if="! folderNot">Mozx Design</h1>
+      <h1 id="h1"  class="dashboard-title">Mozx Design</h1>
     </a>
   </div>
   <div>
@@ -25,6 +25,7 @@ export default {
       folderNot: false,
       width: '0 0 256px',
       expanded: false,
+      h1width: 156,
       menudata: [{
         'id': 100,
         'name': 'Dashboard',
@@ -93,13 +94,17 @@ export default {
         }
       }
       // let coors = swidth
+      if (from.x < to.x && object === document.getElementById('left-slider')) {
+        var b = true
+      }
       new TWEEN.Tween(from)
         .to(to, duration)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function () {
           object.style.setProperty(property, other + from.x + 'px')
-        }).onStop(function (object) {
-          if (from.x < to.x) {
+        }).onComplete(function (object) {
+          if (b) {
+            console.log('expanded')
             Bus.$emit('expanded', '')
           }
         }).start()
@@ -110,16 +115,25 @@ export default {
   watch: {
     folderNot: function () {
       let s = document.getElementById('left-slider')
+      let h = document.getElementById('h1')
       let from
       let to
+      let hfrom
+      let hto
       if (this.folderNot) {
         from = { x: 256, y: 0 }
         to = {x: 64, y: 0}
+        hfrom = { x: 150, y: 0 }
+        hto = { x: 0, y: 0 }
+        this.allReady = false
       } else {
         from = { x: 64, y: 0 }
         to = {x: 256, y: 0}
+        hfrom = { x: 0, y: 0 }
+        hto = { x: 150, y: 0 }
       }
       this.tween(s, 'flex', from, to, 120, '0 0 ')
+      this.tween(h, 'width', hfrom, hto, 120, '')
     }
   },
   mounted: function () {
@@ -156,14 +170,18 @@ export default {
     background-color: #002140;
     padding: 1rem 1rem;
   }
-  h1 {
+  .dashboard-title {
     color: #fff;
     display: inline-block;
     vertical-align: middle;
     font-size: 20px;
-    margin: 0 0 0 12px;
+    margin: 0 0 0 0px;
     font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
     font-weight: 600;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 150px;
   }
   .dashboard-logo img
   {
