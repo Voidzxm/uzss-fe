@@ -50,9 +50,6 @@ export default {
         }, {
           'id': 101,
           'name': 'Members5'
-        }, {
-          'id': 102,
-          'name': 'Members6'
         }]
       }, {
         'id': 102,
@@ -67,6 +64,18 @@ export default {
         }, {
           'id': 102,
           'name': 'Members9'
+        },
+        {
+          'id': 103,
+          'name': 'Members20'
+        },
+        {
+          'id': 104,
+          'name': 'Members21'
+        },
+        {
+          'id': 105,
+          'name': 'Members22'
         }]
       }, {
         'id': 103,
@@ -132,8 +141,8 @@ export default {
         hfrom = { x: 0, y: 0 }
         hto = { x: 150, y: 0 }
       }
-      this.tween(s, 'flex', from, to, 120, '0 0 ')
-      this.tween(h, 'width', hfrom, hto, 120, '')
+      this.tween(s, 'flex', from, to, 150, '0 0 ')
+      this.tween(h, 'width', hfrom, hto, 150, '')
     }
   },
   mounted: function () {
