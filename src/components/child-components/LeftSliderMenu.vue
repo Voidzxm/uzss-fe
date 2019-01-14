@@ -45,7 +45,32 @@
                   @click="clickSecond(item, second)"
                   v-for="second in item.secondClass"
                   :key="item.id + second.id">
-                <a :class="{'is-active a': activeNode === second.name }">{{second.name}}</a>
+                  <a v-if="second.thirdClass === undefined || second.thirdClass.length === 0" :class="{'is-active a': activeNode === second.name }">{{second.name}}</a>
+                  <span v-else-if="second.thirdClass.length > 0" style="width: 100%;white-space: nowrap;">
+                    <a style="float:left;width:60%;">{{second.name}}</a>
+                    <span class="angle-span">
+                        <transition name="out-in" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
+                          <font-awesome-icon  icon="angle-down" v-if="expandThird !== second.name"/>
+                          <font-awesome-icon  icon="angle-up" v-else/>
+                        </transition>
+                    </span>
+                  </span>
+                  <transition
+                  name="slide-fade">
+                    <ul
+                      :id="'third' + second.id"
+                      :key="'third' + second.id"
+                      class="menu-list third-menu-list"
+                      v-if="second.thirdClass !== undefined && second.thirdClass.length > 0 && expandThird === second.name">
+                      <li class="li-child"
+                          :class="{'is-active': activeNode === third.name }"
+                          @click="clickThird(second.name, third)"
+                          v-for="third in second.thirdClass"
+                          :key="item.id + second.id + third.id">
+                        <a style="padding-left: 80px;">{{third.name}}</a>
+                      </li>
+                    </ul>
+                  </transition>
               </li>
             </ul>
           </transition>
@@ -70,9 +95,11 @@ export default {
       activeNode: null,
       activeParent: null,
       expandSecond: '',
+      expandThird: '',
       expanded: null,
       isReady: true,
-      aheight: 130
+      aheight: 130,
+      clickingThird: false
     }
   },
   mounted: function () {
@@ -109,29 +136,32 @@ export default {
   methods: {
     clickFirst: function (item) {
       this.expandSecond = this.expandSecond === item.name ? '' : item.name
-      // this.expandSecond = item.name
-      // let ss = document.getElementsByClassName('slide-fade-enter-active')
       let ss = document.getElementById('second' + item.id)
-      // let sss = this.$el.querySelector('.menu-list .second-menu-list')
-      // console.log('offsetHeight ' + ss.offsetHeight)
       if (ss != null && ss.offsetHeight > 0) {
         item.offsetHeight = ss.offsetHeight
-        // ss.style.setProperty('height', item.offsetHeight + 'px')
-      }
-      // let from = { x: 130, y: 0 }
-      // let to = {x: 0, y: 0}
-      // this.tween2(item, from, to, 1000)
-      if (ss !== null) {
-        console.log('offsetHeight ' + ss.offsetHeight)
-        // let from = { x: ss.offsetHeight, y: 0 }
-        // let to = {x: 0, y: 0}
-        // ss.style.setProperty('height', 0)
-        // this.tween(ss, 'height', from, to, 1200, item)
       }
     },
     clickSecond: function (item, second) {
-      this.activeNode = second.name
-      this.activeParent = item.name
+      if (!this.clickingThird) {
+        if (second.thirdClass !== undefined && second.thirdClass.length > 0) {
+          this.expandThird = this.expandThird === second.name ? '' : second.name
+        } else {
+          this.activeNode = second.name
+          this.activeParent = item.name
+          this.expandThird = ''
+          this.$store.commit('userVariables/addHeadTags', second.name)
+          this.$store.commit('userVariables/setActivatedTag', second.name)
+          console.log('activated tag: ' + this.$store.state.userVariables.activatedTag)
+        }
+      }
+      this.clickingThird = false
+    },
+    clickThird: function (second, third) {
+      this.activeNode = third.name
+      this.activeParent = second.name
+      this.clickingThird = true
+      this.$store.commit('userVariables/addHeadTags', third.name)
+      this.$store.commit('userVariables/setActivatedTag', third.name)
     },
     // TweenJs 动画监听
     tween2: function (item, from, to, duration) {
@@ -206,6 +236,10 @@ export default {
     background-color: #000c17;
     margin-top: -5px;
   }
+  .third-menu-list {
+    background-color: #000707;
+    margin-top: -5px;
+  }
   .li-child a{
     text-align: left;
     width: 100%;
@@ -213,7 +247,7 @@ export default {
     font-size: 14px;
     color: cyan;
   }
-  .li-child a:hover{
+  .li-child a:hover {
     background-color: transparent;
     color: white;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="top-header">
     <span class="fold-parent-container" @click="bus">
-      <font-awesome-icon icon="list" class="fold-trigger"/>
+      <font-awesome-icon icon="list" class="fold-trigger" :class="rotate"/>
     </span>
     <div class="right-parent-container">
       <div class="profile-parent-container">
@@ -52,7 +52,8 @@ export default {
       titleDropDown: false,
       lanDropDown: false,
       titleDropDownLeft: '',
-      lanDropDownLeft: ''
+      lanDropDownLeft: '',
+      rotate: ''
     }
   },
   mounted: function () {
@@ -69,6 +70,7 @@ export default {
   methods: {
     bus () {
       Bus.$emit('msg', '')
+      this.rotate = this.rotate === '' ? 'fa-rotate-90' : ''
     },
     getElementLeft: function (element) {
       let actualLeft = element.offsetLeft
@@ -97,8 +99,8 @@ export default {
 <style scoped>
   .top-header
   {
-    height: 64px;
-    line-height: 64px;
+    height: 50px;
+    line-height: 50px;
     padding: 0;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
@@ -128,7 +130,7 @@ export default {
   {
     vertical-align: middle;
     font-size: 24px;
-    margin: 20px;
+    margin: 15px;
   }
   .tool-parent-container
   {

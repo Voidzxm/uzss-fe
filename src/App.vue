@@ -4,6 +4,7 @@
     <LeftSlider></LeftSlider>
     <div class="zxm-layout">
       <TopHeader></TopHeader>
+      <ScrollBar></ScrollBar>
       <div class="container test">
         <div style="padding: 0 12px;display: inline-block;height: 100%;transition: all .3s;">
           <div style="background-color: red;width: 150px;height: 20px;opacity: 0;">
@@ -27,10 +28,11 @@ import LeftSlider from './components/layout/LeftSlider'
 import TopHeader from './components/layout/TopHeader'
 import dropdownList from './components/child-components/dropdownList'
 import TWEEN from '@tweenjs/tween.js'
+import ScrollBar from './components/child-components/ScrollBar'
 
 export default {
   name: 'App',
-  components: {LeftSlider, TopHeader, dropdownList},
+  components: {ScrollBar, LeftSlider, TopHeader, dropdownList},
   data () {
     return {
       width: 150,
@@ -136,6 +138,8 @@ export default {
     -ms-user-select: none; /*IE10*/
     -khtml-user-select: none; /*早期浏览器*/
     user-select: none;
+    height: 100%;
+    transition: all .3s linear;
   }
   .dashboard
   {

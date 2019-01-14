@@ -6,7 +6,7 @@
       <h1 id="h1"  class="dashboard-title">Mozx Design</h1>
     </a>
   </div>
-  <div>
+  <div style="height: 100%;">
     <LeftSliderMenu :menudata="menudata"></LeftSliderMenu>
   </div>
 </div>
@@ -75,7 +75,33 @@ export default {
         },
         {
           'id': 105,
-          'name': 'Members22'
+          'name': 'Members22',
+          'thirdClass': [
+            {
+              'id': 205,
+              'name': 'Members32'
+            },
+            {
+              'id': 206,
+              'name': 'Members33'
+            },
+            {
+              'id': 207,
+              'name': 'Members34'
+            },
+            {
+              'id': 208,
+              'name': 'Members35'
+            },
+            {
+              'id': 209,
+              'name': 'Members36'
+            },
+            {
+              'id': 210,
+              'name': 'Members37'
+            }
+          ]
         }]
       }, {
         'id': 103,
@@ -90,6 +116,18 @@ export default {
         }, {
           'id': 102,
           'name': 'Members12'
+        },
+        {
+          'id': 103,
+          'name': 'Members29'
+        },
+        {
+          'id': 104,
+          'name': 'Members30'
+        },
+        {
+          'id': 105,
+          'name': 'Members31'
         }]
       }]
     }
@@ -162,13 +200,14 @@ export default {
     flex-direction: column;
     /*padding: 1.5rem 1.5rem;*/
     /*flex: 0 0 25rem;*/
-    height: 100%;
+    /*height: 100%;*/
     background-color: rgb(0, 21, 41);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     z-index: 10;
     flex: 0 0 256px;
     -webkit-transition: max-height .3s;
     transition: max-height .3s;
+    overflow: hidden;
   }
  .dashboard-panel.is-one-fifth
   {
