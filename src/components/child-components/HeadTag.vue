@@ -1,5 +1,5 @@
 <template>
-  <span class="tag-item tag" :class="tagClass" @click="click" :id="'tag' + title">
+  <span class="tag-item tag" :class="tagClass" @click="click" :id="'tag' + tagId">
     <font-awesome-icon  icon="feather" v-if="isActive"/>&nbsp;
     {{title}}&nbsp;
     <a class="delete is-small" @click="remove"></a>
@@ -9,12 +9,13 @@
 <script>
 export default {
   name: 'HeadTag',
-  props: ['title', 'isActive'],
+  props: ['title', 'isActive', 'tagId'],
   data () {
     return {
       tagClass: '',
       el: '',
-      index: 0
+      index: 0,
+      isRemoving: false
     }
   },
   mounted: function () {
@@ -32,22 +33,36 @@ export default {
       } else {
         this.tagClass = 'is-white'
       }
-      this.el = document.getElementById('tag' + this.title)
-      this.index = this.$store.state.userVariables.headTags.indexOf(this.title)
+      this.el = document.getElementById('tag' + this.tagId)
+      console.debug('init tag id: ' + this.tagId)
+      let obj = this.$store.state.userVariables.headTags.filter((v) => {
+        return v.id === this.tagId
+      })
+      console.log('headTags： ' + JSON.stringify(this.$store.state.userVariables.headTags))
+      console.log('obj： ' + JSON.stringify(obj[0]))
+      this.index = this.$store.state.userVariables.headTags.indexOf(obj[0])
     },
     click () {
-      this.$store.commit('userVariables/setActivatedTag', this.title)
-      this.index = this.$store.state.userVariables.headTags.indexOf(this.title)
-      // 判断当前点击的tag后面是否有tag被挤出页面
-      console.log('this.el.offsetLeft + this.el.clientWidth * 2: ' + (this.el.offsetLeft + this.el.clientWidth * 2))
-      console.log('document.body.clientWidth: ' + document.body.clientWidth)
-      console.log('index: ' + this.index + ' this.$store.state.userVariables.headTags.length: ' + this.$store.state.userVariables.headTags.length)
-      if ((this.el.offsetLeft + this.el.clientWidth * 2) > document.body.clientWidth && (this.index < this.$store.state.userVariables.headTags.length - 1)) {
-        console.log('当前点击的tag后面有tag被挤出去啦！！')
+      if (!this.isRemoving) {
+        this.$store.commit('userVariables/setActivatedTag', {'id': this.tagId, 'name': this.title})
+        // TODO
+        let obj = this.$store.state.userVariables.headTags.filter((v) => {
+          return v.id === this.tagId
+        })
+        this.index = this.$store.state.userVariables.headTags.indexOf(obj[0])
+        // 判断当前点击的tag后面是否有tag被挤出页面
+        console.log('this.el.offsetLeft + this.el.clientWidth * 2: ' + (this.el.offsetLeft + this.el.clientWidth * 2))
+        console.log('clientWidth: ' + document.body.clientWidth)
+        console.log('index: ' + this.index + ' headTags.length: ' + this.$store.state.userVariables.headTags.length)
+        if ((this.el.offsetLeft + this.el.clientWidth * 2) > document.body.clientWidth && (this.index < this.$store.state.userVariables.headTags.length - 1)) {
+          console.log('当前点击的tag后面有tag被挤出去啦！！')
+        }
       }
+      this.isRemoving = false
     },
     remove () {
-      this.$store.commit('userVariables/removeHeadTags', this.title)
+      this.$store.commit('userVariables/removeHeadTags', {'id': this.tagId, 'name': this.title})
+      this.isRemoving = true
     }
   }
 }

@@ -5,7 +5,7 @@
       :key="item.id"
       :id="'first' + item.id"
       style="white-space: nowrap;position: relative;" >
-    <li class="li-parent" :class="{'li-parent-active': activeParent === item.name }">
+    <li class="li-parent" :class="{'li-parent-active': activeParent === item.id }">
       <transition
         name="slide-fade-left">
       <div v-if="folderNot" class="menu-container">
@@ -24,7 +24,7 @@
         </span>
         <span class="angle-span">
           <transition name="out-in" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-            <font-awesome-icon  icon="angle-down" v-if="expandSecond !== item.name"/>
+            <font-awesome-icon  icon="angle-down" v-if="expandSecond !== item.id"/>
             <font-awesome-icon  icon="angle-up" v-else/>
           </transition>
         </span>
@@ -39,18 +39,18 @@
               :id="'second' + item.id"
               :key="'second' + item.id"
               class="menu-list second-menu-list"
-              v-if="item.secondClass.length >= 0 && expandSecond === item.name">
+              v-if="item.secondClass.length >= 0 && expandSecond === item.id">
               <li class="li-child"
-                  :class="{'is-active': activeNode === second.name }"
+                  :class="{'is-active': activeNode.id === second.id }"
                   @click="clickSecond(item, second)"
                   v-for="second in item.secondClass"
                   :key="item.id + second.id">
-                  <a v-if="second.thirdClass === undefined || second.thirdClass.length === 0" :class="{'is-active a': activeNode === second.name }">{{second.name}}</a>
+                  <a v-if="second.thirdClass === undefined || second.thirdClass.length === 0" :class="{'is-active a': activeNode.id === second.id }">{{second.name}}</a>
                   <span v-else-if="second.thirdClass.length > 0" style="width: 100%;white-space: nowrap;">
                     <a style="float:left;width:60%;">{{second.name}}</a>
                     <span class="angle-span">
                         <transition name="out-in" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-                          <font-awesome-icon  icon="angle-down" v-if="expandThird !== second.name"/>
+                          <font-awesome-icon  icon="angle-down" v-if="expandThird !== second.id"/>
                           <font-awesome-icon  icon="angle-up" v-else/>
                         </transition>
                     </span>
@@ -61,10 +61,10 @@
                       :id="'third' + second.id"
                       :key="'third' + second.id"
                       class="menu-list third-menu-list"
-                      v-if="second.thirdClass !== undefined && second.thirdClass.length > 0 && expandThird === second.name">
+                      v-if="second.thirdClass !== undefined && second.thirdClass.length > 0 && expandThird === second.id">
                       <li class="li-child"
-                          :class="{'is-active': activeNode === third.name }"
-                          @click="clickThird(second.name, third)"
+                          :class="{'is-active': activeNode.id === third.id }"
+                          @click="clickThird(second, third)"
                           v-for="third in second.thirdClass"
                           :key="item.id + second.id + third.id">
                         <a style="padding-left: 80px;">{{third.name}}</a>
@@ -83,7 +83,7 @@
 
 <script>
 import Bus from '../../assets/eventBus.js'
-import TWEEN from '@tweenjs/tween.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'LeftSliderMenu',
@@ -92,22 +92,23 @@ export default {
     return {
       folderNot: false,
       isActive: '',
-      activeNode: null,
-      activeParent: null,
-      expandSecond: '',
-      expandThird: '',
       expanded: null,
       isReady: true,
-      aheight: 130,
       clickingThird: false
     }
   },
+  computed: mapState({
+    activeNode: state => state.userVariables.activatedTag,
+    activeParent: state => state.userVariables.expandState.activeParent,
+    expandSecond: state => state.userVariables.expandState.expandSecond,
+    expandThird: state => state.userVariables.expandState.expandThird
+  }),
   mounted: function () {
     let that = this
-    Bus.$on('msg', (e) => {
+    Bus.$on('msg', () => {
       that.folderNot = !that.folderNot
     })
-    Bus.$on('expanded', (e) => {
+    Bus.$on('expanded', () => {
       console.log('get expanded' + that.isReady)
       if (!that.folderNot) {
         that.isReady = true
@@ -129,60 +130,39 @@ export default {
     isReady: function () {
       console.log('isReady: ' + this.isReady)
     },
-    aheight: function () {
-      console.log(this.aheight)
+    activeParent: function () {
+      console.debug('watch activeParent: ' + this.activeParent)
+    },
+    expandSecond: function () {
+      console.debug('watch expandSecond: ' + this.expandSecond)
+    },
+    expandThird: function () {
+      console.debug('watch expandThird: ' + this.expandThird)
     }
   },
   methods: {
     clickFirst: function (item) {
-      this.expandSecond = this.expandSecond === item.name ? '' : item.name
-      let ss = document.getElementById('second' + item.id)
-      if (ss != null && ss.offsetHeight > 0) {
-        item.offsetHeight = ss.offsetHeight
-      }
+      this.$store.commit('userVariables/setExpandState', {'expandSecond': this.expandSecond === item.id ? '' : item.id})
+      console.log('expandSecond: ' + this.expandSecond)
     },
     clickSecond: function (item, second) {
       if (!this.clickingThird) {
         if (second.thirdClass !== undefined && second.thirdClass.length > 0) {
-          this.expandThird = this.expandThird === second.name ? '' : second.name
+          this.$store.commit('userVariables/setExpandState', {'expandThird': this.expandThird === second.id ? '' : second.id})
         } else {
-          this.activeNode = second.name
-          this.activeParent = item.name
-          this.expandThird = ''
-          this.$store.commit('userVariables/addHeadTags', second.name)
-          this.$store.commit('userVariables/setActivatedTag', second.name)
-          console.log('activated tag: ' + this.$store.state.userVariables.activatedTag)
+          this.$store.commit('userVariables/setExpandState', {'activeParent': item.id, 'expandThird': ''})
+          this.$store.commit('userVariables/addHeadTags', {'id': second.id, 'name': second.name})
+          this.$store.commit('userVariables/setActivatedTag', {'id': second.id, 'name': second.name})
+          console.debug('activated tag: ' + JSON.stringify(this.$store.state.userVariables.activatedTag))
         }
       }
       this.clickingThird = false
     },
     clickThird: function (second, third) {
-      this.activeNode = third.name
-      this.activeParent = second.name
       this.clickingThird = true
-      this.$store.commit('userVariables/addHeadTags', third.name)
-      this.$store.commit('userVariables/setActivatedTag', third.name)
-    },
-    // TweenJs 动画监听
-    tween2: function (item, from, to, duration) {
-      function animate () {
-        if (TWEEN.update()) {
-          requestAnimationFrame(animate)
-        }
-      }
-      // let coors = swidth
-      let ss = document.getElementById('second' + item.id)
-      console.log(ss)
-      new TWEEN.Tween(from)
-        .to(to, duration)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(function () {
-          ss.style.setProperty('height', from.x + 'px')
-          console.log(ss.style.getPropertyValue('height'))
-          this.aheight = from.x
-        }).start()
-
-      animate()
+      this.$store.commit('userVariables/setExpandState', {'activeParent': second.id})
+      this.$store.commit('userVariables/addHeadTags', {'id': third.id, 'name': third.name})
+      this.$store.commit('userVariables/setActivatedTag', {'id': third.id, 'name': third.name})
     }
   }
 }
@@ -225,7 +205,7 @@ export default {
     font-size: 14px;
   }
   .menu-list {
-    border-left: 0px solid #dbdbdb;
+    border-left: 0 solid #dbdbdb;
     line-height: 30px;
     float: left;
     width: 100%;
