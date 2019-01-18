@@ -1,7 +1,7 @@
 <template>
 <div class="dashboard-panel is-one-fifth" :style="{flex: width}" id="left-slider" >
   <div class="dashboard-logo">
-    <a href="/" style="white-space: nowrap;">
+    <a href="#" style="white-space: nowrap;">
       <img src="../../assets/logo.png" alt="logo">
       <h1 id="h1"  class="dashboard-title">Mozx Design</h1>
     </a>
@@ -72,7 +72,7 @@ export default {
         this.allReady = false
       } else {
         from = { x: 64, y: 0 }
-        to = {x: 256, y: 0}
+        to = { x: 256, y: 0 }
         hfrom = { x: 0, y: 0 }
         hto = { x: 150, y: 0 }
       }

@@ -13,7 +13,7 @@ export default new Vuex.Store({
   modules: {
     cart,
     products,
-    userVariables: userVariables
+    userVariables
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

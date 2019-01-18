@@ -7,11 +7,12 @@ import router from './router'
 import '../node_modules/bulma/css/bulma.css'
 import 'animate.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee, faListAlt, faList, faSearch, faQuestionCircle, faBell, faGlobe, faAngleDown, faAngleUp, faTachometerAlt, faFeather } from '@fortawesome/free-solid-svg-icons'
+// import { faCoffee, faListAlt, faList, faSearch, faQuestionCircle, faBell, faGlobe, faAngleDown, faAngleUp, faTachometerAlt, faFeather } from '@fortawesome/free-solid-svg-icons'
+import {fas} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add({ faCoffee, faListAlt, faList, faSearch, faQuestionCircle, faBell, faGlobe, faAngleDown, faAngleUp, faTachometerAlt, faFeather })
-
+// library.add({ faCoffee, faListAlt, faList, faSearch, faQuestionCircle, faBell, faGlobe, faAngleDown, faAngleUp, faTachometerAlt, faFeather })
+library.add(fas)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 

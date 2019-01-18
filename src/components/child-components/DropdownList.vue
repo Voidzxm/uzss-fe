@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'dropdownList',
+  name: 'DropdownList',
   props: ['items', 'is-hidden'],
   mounted: function () {
   }

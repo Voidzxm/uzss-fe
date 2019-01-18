@@ -8,7 +8,7 @@
     <li class="li-parent" :class="{'li-parent-active': activeParent === item.id }">
       <transition
         name="slide-fade-left">
-      <div v-if="folderNot" class="menu-container">
+      <div v-if="folderNot" class="menu-container" style="height: 50px;line-height: 50px;">
         <span class="icon-span-parent">
           <span class="icon-span" style="font-size: 14px;">
             <font-awesome-icon :icon="item.icon"/>
@@ -101,7 +101,8 @@ export default {
     activeNode: state => state.userVariables.activatedTag,
     activeParent: state => state.userVariables.expandState.activeParent,
     expandSecond: state => state.userVariables.expandState.expandSecond,
-    expandThird: state => state.userVariables.expandState.expandThird
+    expandThird: state => state.userVariables.expandState.expandThird,
+    expandState: state => state.userVariables.expandState
   }),
   mounted: function () {
     let that = this
@@ -138,6 +139,9 @@ export default {
     },
     expandThird: function () {
       console.debug('watch expandThird: ' + this.expandThird)
+    },
+    expandState: function () {
+      console.debug('watch expandState: ' + this.expandState)
     }
   },
   methods: {
@@ -152,7 +156,7 @@ export default {
         } else {
           this.$store.commit('userVariables/setExpandState', {'activeParent': item.id, 'expandThird': ''})
           this.$store.commit('userVariables/addHeadTags', {'id': second.id, 'name': second.name})
-          this.$store.commit('userVariables/setActivatedTag', {'id': second.id, 'name': second.name})
+          this.$store.commit('userVariables/setActivatedMenu', {'id': second.id, 'name': second.name})
           console.debug('activated tag: ' + JSON.stringify(this.$store.state.userVariables.activatedTag))
         }
       }
@@ -162,7 +166,8 @@ export default {
       this.clickingThird = true
       this.$store.commit('userVariables/setExpandState', {'activeParent': second.id})
       this.$store.commit('userVariables/addHeadTags', {'id': third.id, 'name': third.name})
-      this.$store.commit('userVariables/setActivatedTag', {'id': third.id, 'name': third.name})
+      this.$store.commit('userVariables/setActivatedMenu', {'id': third.id, 'name': third.name})
+      console.debug('expandState: ' + JSON.stringify(this.$store.state.userVariables.expandState))
     }
   }
 }

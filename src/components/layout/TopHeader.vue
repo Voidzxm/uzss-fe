@@ -1,8 +1,11 @@
 <template>
   <div class="top-header">
-    <span class="fold-parent-container" @click="bus">
-      <font-awesome-icon icon="list" class="fold-trigger" :class="rotate"/>
-    </span>
+    <div class="left-parent-container">
+      <span class="fold-parent-container" @click="bus">
+        <font-awesome-icon icon="list" class="fold-trigger" :class="rotate"/>
+      </span>
+      <BreadCrumb></BreadCrumb>
+    </div>
     <div class="right-parent-container">
       <div class="profile-parent-container">
         <span>
@@ -25,7 +28,7 @@
             <span class="profile-name">Void zxm</span>
           </span>
           <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-            <dropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="titleDropDown" :style="{left: titleDropDownLeft + 'px'}"></dropdownList>
+            <DropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="titleDropDown" :style="{left: titleDropDownLeft + 'px'}"></DropdownList>
           </transition>
       </div>
       <div class="profile-parent-container" @mouseenter="lanDropDown = true" @mouseleave="lanDropDown = false" id="lan-container">
@@ -33,7 +36,7 @@
             <font-awesome-icon icon="globe" class="right-tool"/>
           </span>
         <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-          <dropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="lanDropDown" :style="{left: lanDropDownLeft + 'px'}"></dropdownList>
+          <DropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="lanDropDown" :style="{left: lanDropDownLeft + 'px'}"></DropdownList>
         </transition>
       </div>
     </div>
@@ -41,12 +44,14 @@
 </template>
 
 <script>
-import dropdownList from '../child-components/dropdownList'
+import common from '../../api/common'
 import Bus from '../../assets/eventBus.js'
+import DropdownList from '../child-components/DropdownList'
+import BreadCrumb from '../child-components/BreadCrumb'
 
 export default {
-  name: 'TopNavigator',
-  components: {dropdownList},
+  name: 'TopHeader',
+  components: {BreadCrumb, DropdownList},
   data () {
     return {
       titleDropDown: false,
@@ -59,38 +64,18 @@ export default {
   mounted: function () {
     let p = document.getElementById('profile-container')
     let l = document.getElementById('lan-container')
-    this.titleDropDownLeft = this.getElementLeft(p) + p.offsetWidth - 150
-    this.lanDropDownLeft = this.getElementLeft(l) + l.offsetWidth - 150
+    this.titleDropDownLeft = common.getElementLeft(p) + p.offsetWidth - 150
+    this.lanDropDownLeft = common.getElementLeft(l) + l.offsetWidth - 150
     const that = this
     window.onresize = function temp () {
-      that.titleDropDownLeft = that.getElementLeft(p) + p.offsetWidth - 150
-      that.lanDropDownLeft = that.getElementLeft(l) + l.offsetWidth - 150
+      that.titleDropDownLeft = common.getElementLeft(p) + p.offsetWidth - 150
+      that.lanDropDownLeft = common.getElementLeft(l) + l.offsetWidth - 150
     }
   },
   methods: {
     bus () {
       Bus.$emit('msg', '')
       this.rotate = this.rotate === '' ? 'fa-rotate-90' : ''
-    },
-    getElementLeft: function (element) {
-      let actualLeft = element.offsetLeft
-      let current = element.offsetParent
-
-      while (current !== null) {
-        actualLeft += current.offsetLeft
-        current = current.offsetParent
-      }
-
-      return actualLeft
-    },
-    getElementTop: function (element) {
-      let actualTop = element.offsetTop
-      let current = element.offsetParent
-      while (current !== null) {
-        actualTop += current.offsetTop
-        current = current.offsetParent
-      }
-      return actualTop
     }
   }
 }
@@ -114,11 +99,18 @@ export default {
   {
     float: left;
     transition: all .3s;
+    margin-right: 10px;
   }
   .fold-parent-container:hover
   {
     background-color: aliceblue;
     cursor: pointer;
+  }
+  .left-parent-container
+  {
+    float: left;
+    overflow: hidden;
+    height: 100%;
   }
   .right-parent-container
   {
