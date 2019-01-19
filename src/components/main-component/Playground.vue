@@ -105,6 +105,7 @@ export default {
         s.style.setProperty('height', '300px')
         this.show = true
       }
+      console.log('  prevState: ' + JSON.stringify(this.$store.prevState)) // .state.userVariables.prevState
     },
     scroll: function () {
       let x = document.getElementById('tag-scroll')

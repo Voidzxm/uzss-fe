@@ -8,6 +8,7 @@
 import HeadTag from './HeadTag'
 import { mapState } from 'vuex'
 import Bus from '../../assets/eventBus.js'
+import TWEEN from '@tweenjs/tween.js'
 
 export default {
   name: 'ScrollBar',
@@ -38,18 +39,40 @@ export default {
         return v.id === this.activatedTag.id
       })
       let index = this.$store.state.userVariables.headTags.indexOf(obj[0])
-      console.log('Filter obj: ' + JSON.stringify(obj))
-      console.log('Filter index: ' + index)
-      console.log('this.$refs.tagChild: ' + this.$refs.tagChild)
-      console.log('this.$refs.tagChild: ' + JSON.stringify(this.$refs.tagChild[index]))
-      this.$refs.tagChild[index].setIsOverflow()
+      console.log('index: ' + index)
+      if (this.$refs.tagChild !== undefined && this.$refs.tagChild[index] !== undefined) {
+        this.$refs.tagChild[index].setIsOverflow()
+      }
     },
     scrollLeft: function () {
       console.log('检测到scrollLeft改变： ' + this.scrollLeft)
-      this.me.scrollLeft = this.scrollLeft
+      // this.me.scrollLeft = this.scrollLeft
+      let from = { x: this.$store.state.userVariables.prevScrollLeft, y: 0 }
+      let to = { x: this.$store.state.userVariables.scrollLeft, y: 0 }
+      this.tween(from, to, 150)
     },
     folderNot: function () {
       this.me.scrollLeft = this.scrollLeft
+    }
+  },
+  methods: {
+    // TweenJs 动画监听
+    tween: function (from, to, duration) {
+      let that = this
+      console.log('tweeen')
+      function animate () {
+        if (TWEEN.update()) {
+          requestAnimationFrame(animate)
+        }
+      }
+      new TWEEN.Tween(from)
+        .to(to, duration)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(function () {
+          console.log()
+          that.me.scrollLeft = from.x
+        }).start()
+      animate()
     }
   }
 }

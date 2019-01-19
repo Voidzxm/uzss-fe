@@ -111,7 +111,8 @@ const state = {
   headTags: [],
   activatedTag: '',
   expandState: {'activeParent': '', 'expandSecond': '', 'expandThird': ''},
-  scrollLeft: 0
+  scrollLeft: 0,
+  prevScrollLeft: 0
 }
 
 // getters
@@ -221,6 +222,7 @@ const mutations = {
     if (x === '') {
       return
     }
+    state.prevScrollLeft = state.scrollLeft
     state.scrollLeft += x
   },
   console (x) {
