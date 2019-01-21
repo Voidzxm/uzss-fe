@@ -27,17 +27,13 @@
             <img src="../../assets/logo.png" alt="logo">
             <span class="profile-name">Void zxm</span>
           </span>
-          <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
-            <DropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="titleDropDown" :style="{left: titleDropDownLeft + 'px'}"></DropdownList>
-          </transition>
+          <DropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="titleDropDown" :style="{left: titleDropDownLeft + 'px'}"></DropdownList>
       </div>
       <div class="profile-parent-container" @mouseenter="lanDropDown = true" @mouseleave="lanDropDown = false" id="lan-container">
           <span>
             <font-awesome-icon icon="globe" class="right-tool"/>
           </span>
-        <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 200 }">
           <DropdownList :items="['Overview', 'Modifiers', 'Grid', 'Form']" v-if="lanDropDown" :style="{left: lanDropDownLeft + 'px'}"></DropdownList>
-        </transition>
       </div>
     </div>
   </div>

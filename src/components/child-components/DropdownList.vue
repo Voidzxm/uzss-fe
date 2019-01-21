@@ -1,12 +1,14 @@
 <template>
-  <div class="drop-down" v-bind:hidden="isHidden">
-    <div class="padding"></div>
-    <div class="box drop-down-box" style="background-color: white;">
-      <a v-for="item in items" href="#" class="dropdown-item" :key="item" >
-        {{item}}
-      </a>
+  <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 300, leave: 200 }">
+    <div class="drop-down" v-bind:hidden="isHidden">
+      <div class="padding"></div>
+      <div class="box drop-down-box" style="background-color: white;">
+        <a v-for="item in items" href="#" class="dropdown-item" :key="item" >
+          {{item}}
+        </a>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
