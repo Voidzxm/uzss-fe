@@ -10,7 +10,7 @@
 // import Bus from '../../assets/eventBus.js'
 export default {
   name: 'HeadTag',
-  props: ['title', 'isActive', 'tagId'],
+  props: ['title', 'isActive', 'tagId', 'enName'],
   data () {
     return {
       tagClass: '',
@@ -34,6 +34,9 @@ export default {
       that.init()
       that.setIsOverflow()
     }
+    this.$nextTick(function () {
+      that.setIsOverflow()
+    })
   },
   destroyed: function () {
     console.debug('啊, 我被销毁了.')
@@ -44,26 +47,6 @@ export default {
       this.init()
       if (this.isActive) {
         console.debug('*********************开始判断前后tag状态*******************')
-        /* let x = document.getElementById('tag-scroll')
-        if (this.isRightOverflow) {
-          console.log('当前点击的tag后面有tag被挤出去啦！！')
-          if (this.folderNot) {
-            // this.scrollLeft += x.scrollWidth - document.body.clientWidth + 64
-            // this.scrollLeft += this.el.clientWidth
-            this.$store.commit('userVariables/changeScrollLeft', this.el.clientWidth)
-          } else {
-            // this.scrollLeft += this.el.clientWidth
-            this.$store.commit('userVariables/changeScrollLeft', this.el.clientWidth)
-          }
-          // x.scrollLeft = this.scrollLeft
-          x.scrollLeft = this.$store.state.userVariables.scrollLeft
-          console.log('x.scrollWidth: ' + x.scrollWidth)
-          console.log('this.scrollLeft: ' + this.scrollLeft)
-        } else if (this.isLeftOverflow) {
-          this.$store.commit('userVariables/changeScrollLeft', -1 * this.el.clientWidth)
-          x.scrollLeft = this.$store.state.userVariables.scrollLeft
-          console.log('当前点击的tag前面有tag被挤出去啦！！')
-        } */
       }
     }
   },
@@ -77,13 +60,13 @@ export default {
     },
     click () {
       if (!this.isRemoving) {
-        this.$store.commit('userVariables/setActivatedTag', {'id': this.tagId, 'name': this.title})
+        this.$store.commit('userVariables/setActivatedTag', {'id': this.tagId, 'name': this.title, 'enName': this.enName})
         this.setIsOverflow()
       }
       this.isRemoving = false
     },
     setIsOverflow () {
-      console.log('开始调用 tagID: ' + this.tagId + '的setIsOverflow方法')
+      console.debug('开始调用 tagID: ' + this.tagId + '的setIsOverflow方法')
       if (this.isDestroyed) {
         // do nothing
       } else {
@@ -104,41 +87,41 @@ export default {
         // let feow = 0
         let neol = 0
         let neow = 0
-        console.log('eol: ' + eol + ' eow: ' + eow + ' xsl: ' + xsl + ' xol: ' + xol + ' bow: ' + bow)
-        console.log('index: ' + this.index + ' headTags.length: ' + headTags.length)
+        console.debug('eol: ' + eol + ' eow: ' + eow + ' xsl: ' + xsl + ' xol: ' + xol + ' bow: ' + bow)
+        console.debug('index: ' + this.index + ' headTags.length: ' + headTags.length)
         if (this.index === 0) {
           let dist = eol - (xsl + xol)
-          console.log('当前点击元素是第一个元素，dist: ' + dist)
+          console.debug('当前点击元素是第一个元素，dist: ' + dist)
           if (dist < 0) {
             console.log('当前点击元素是第一个元素，且当前元素未显示完整。')
             this.$store.commit('userVariables/changeScrollLeft', dist)
           }
         } else if (this.index === (headTags.length - 1)) {
           let dist = eol + eow - bow - this.$store.state.userVariables.scrollLeft
-          console.log('current scrollLeft: ' + this.$store.state.userVariables.scrollLeft)
-          console.log('当前点击元素是最后一个元素，dist: ' + dist)
+          console.debug('current scrollLeft: ' + this.$store.state.userVariables.scrollLeft)
+          console.debug('当前点击元素是最后一个元素，dist: ' + dist)
           if (dist > 0) {
-            console.log('当前点击元素是最后一个元素，且当前元素未显示完整。')
+            console.debug('当前点击元素是最后一个元素，且当前元素未显示完整。')
             this.$store.commit('userVariables/changeScrollLeft', dist)
           }
         } else if (this.index > 0 && this.index < (headTags.length - 1)) { //  && this.index < (headTags.length - 1)
           let fel = document.getElementById('tag' + headTags[this.index - 1].id)
           let nel = document.getElementById('tag' + headTags[this.index + 1].id)
-          console.log('fel: ' + fel + ' nel: ' + nel)
+          console.debug('fel: ' + fel + ' nel: ' + nel)
           feol = fel.offsetLeft
           // feow = fel.offsetWidth
           neol = nel.offsetLeft
           neow = nel.offsetWidth
-          console.log(' feol: ' + feol + ' neol: ' + neol + ' neow: ' + neow)
+          console.debug(' feol: ' + feol + ' neol: ' + neol + ' neow: ' + neow)
           let fdist = feol - (xsl + xol)
           let ndist = neol + neow - bow - this.$store.state.userVariables.scrollLeft
-          console.log('当前点击元素是中间元素，fdist: ' + fdist + ' ndist: ' + ndist)
+          console.debug('当前点击元素是中间元素，fdist: ' + fdist + ' ndist: ' + ndist)
           if (fdist < 0) {
-            console.log('当前点击元素的紧前元素未显示完整。')
+            console.debug('当前点击元素的紧前元素未显示完整。')
             this.$store.commit('userVariables/changeScrollLeft', fdist - 10)
           }
           if (ndist > 0) {
-            console.log('当前点击元素的紧后元素未显示完整。')
+            console.debug('当前点击元素的紧后元素未显示完整。')
             this.$store.commit('userVariables/changeScrollLeft', ndist + 10)
           }
         }

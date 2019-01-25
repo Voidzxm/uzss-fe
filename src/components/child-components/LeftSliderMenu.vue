@@ -18,7 +18,7 @@
       <div v-else-if="isReady" class="menu-container" @click="clickFirst(item)" >
         <span class="icon-span-parent" style="float:left;">
           <span class="icon-span">
-            <font-awesome-icon icon="tachometer-alt"/>
+            <font-awesome-icon :icon="item.icon"/>
           </span>
           <span class="menu-name-span">{{item.name}}</span>
         </span>
@@ -108,9 +108,12 @@ export default {
     let that = this
     Bus.$on('msg', () => {
       that.folderNot = !that.folderNot
+      if (that.folderNot) {
+        console.log('Hides Menus')
+      }
     })
     Bus.$on('expanded', () => {
-      console.log('get expanded' + that.isReady)
+      console.debug('get expanded' + that.isReady)
       if (!that.folderNot) {
         that.isReady = true
         console.log('I am ready , show me')
@@ -122,14 +125,14 @@ export default {
   },
   watch: {
     folderNot: function () {
-      console.log('folderNot: ' + this.folderNot)
+      console.debug('folderNot: ' + this.folderNot)
       if (this.folderNot) {
         this.isReady = false
       }
       // this.expanded = false
     },
     isReady: function () {
-      console.log('isReady: ' + this.isReady)
+      console.debug('isReady: ' + this.isReady)
     },
     activeParent: function () {
       console.debug('watch activeParent: ' + this.activeParent)
@@ -147,7 +150,7 @@ export default {
   methods: {
     clickFirst: function (item) {
       this.$store.commit('userVariables/setExpandState', {'expandSecond': this.expandSecond === item.id ? '' : item.id})
-      console.log('expandSecond: ' + this.expandSecond)
+      console.debug('expandSecond: ' + this.expandSecond)
     },
     clickSecond: function (item, second) {
       if (!this.clickingThird) {
@@ -155,8 +158,8 @@ export default {
           this.$store.commit('userVariables/setExpandState', {'expandThird': this.expandThird === second.id ? '' : second.id})
         } else {
           this.$store.commit('userVariables/setExpandState', {'activeParent': item.id, 'expandThird': ''})
-          this.$store.commit('userVariables/addHeadTags', {'id': second.id, 'name': second.name})
-          this.$store.commit('userVariables/setActivatedMenu', {'id': second.id, 'name': second.name})
+          this.$store.commit('userVariables/addHeadTags', {'id': second.id, 'name': second.name, 'enName': second.enName})
+          this.$store.commit('userVariables/setActivatedMenu', {'id': second.id, 'name': second.name, 'enName': second.enName})
           console.debug('activated tag: ' + JSON.stringify(this.$store.state.userVariables.activatedTag))
         }
       }
@@ -165,8 +168,8 @@ export default {
     clickThird: function (second, third) {
       this.clickingThird = true
       this.$store.commit('userVariables/setExpandState', {'activeParent': second.id})
-      this.$store.commit('userVariables/addHeadTags', {'id': third.id, 'name': third.name})
-      this.$store.commit('userVariables/setActivatedMenu', {'id': third.id, 'name': third.name})
+      this.$store.commit('userVariables/addHeadTags', {'id': third.id, 'name': third.name, 'enName': third.enName})
+      this.$store.commit('userVariables/setActivatedMenu', {'id': third.id, 'name': third.name, 'enName': third.enName})
       console.debug('expandState: ' + JSON.stringify(this.$store.state.userVariables.expandState))
     }
   }

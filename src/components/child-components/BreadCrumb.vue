@@ -3,12 +3,6 @@
   <transition name="in-out-translate-fade" mode="in-out">
     <nav v-if="isShowBreadCrumb" class="breadcrumb" aria-label="breadcrumbs">
       <ul class="breadcrumb-ul">
-        <!--<li><span>Home</span></li>
-        <li v-if="expandSecond !== undefined"><span>{{expandSecond}}</span></li>
-        <li v-if="expandThird !== undefined && expandThird !== ''"><span>{{expandThird}}</span></li>
-        <li v-if="activeNode !== undefined" class="is-active">
-            <span>{{activeNode.name}}</span>
-        </li>-->
         <transition-group name="in-out-translate-fade" mode="in-out">
           <li v-for="item in crumbs" :key="item" class="in-out-translate-fade-item"><span>{{item}}</span></li>
         </transition-group>
@@ -30,7 +24,7 @@ export default {
       expandThird: '',
       isShowBreadCrumb: '',
       transition: true,
-      crumbs: ['Home']
+      crumbs: ['主页']
     }
   },
   computed: mapState({
@@ -44,7 +38,7 @@ export default {
       } else {
         this.isShowBreadCrumb = false
       }
-      this.crumbs = ['Home']
+      this.crumbs = ['主页']
       let menuData = this.$store.state.userVariables.menuData
       let expandSecond = this.$store.state.userVariables.expandState.expandSecond
       let expandThird = this.$store.state.userVariables.expandState.expandThird
@@ -68,8 +62,8 @@ export default {
       }
       this.crumbs.push(this.activeNode.name)
       this.transition = !this.transition
-      console.log('BreadCrumb: crumbs: ' + this.crumbs)
-      console.log('BreadCrumb: transition: ' + this.transition)
+      console.debug('BreadCrumb: crumbs: ' + this.crumbs)
+      console.debug('BreadCrumb: transition: ' + this.transition)
       console.debug('menuData' + JSON.stringify(menuData))
       console.debug('expandSecond & expandThird: ' + this.expandSecond + '    ' + this.expandSecond)
     }

@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 300, leave: 200 }">
+  <transition name="fade" enter-active-class="animated fadeIn" leave-acive-class="animated fadeOut" :duration="{ enter: 200, leave: 100 }">
     <div class="drop-down" v-bind:hidden="isHidden">
       <div class="padding"></div>
       <div class="box drop-down-box" style="background-color: white;">

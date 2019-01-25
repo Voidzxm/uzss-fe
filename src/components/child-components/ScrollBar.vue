@@ -1,7 +1,9 @@
 <template>
-    <div class="tag-container" id="tag-scroll">
-      <HeadTag :title="item.name" :tagId='item.id' v-for="item in tags" :key="item.id" :isActive="activatedTag.id === item.id"  ref="tagChild"></HeadTag>
+  <div class="tag-container" id="tag-scroll">
+    <div style="margin: 0 10px;">
+      <HeadTag :title="item.name" :tagId='item.id' :enName="item.enName" v-for="item in tags" :key="item.id" :isActive="activatedTag.id === item.id"  ref="tagChild"></HeadTag>
     </div>
+  </div>
 </template>
 
 <script>
@@ -27,25 +29,24 @@ export default {
   mounted: function () {
     this.me = document.getElementById('tag-scroll')
     let that = this
-    Bus.$on('msg', (e) => {
+    Bus.$on('msg', () => {
       that.folderNot = !that.folderNot
     })
   },
   watch: {
     activatedTag: function () {
-      // TODO 调用不成功待修改
       console.debug('ScrollBar 检测到activatedTag变化', JSON.stringify(this.activatedTag))
       let obj = this.$store.state.userVariables.headTags.filter((v) => {
         return v.id === this.activatedTag.id
       })
       let index = this.$store.state.userVariables.headTags.indexOf(obj[0])
-      console.log('index: ' + index)
+      console.debug('index: ' + index)
       if (this.$refs.tagChild !== undefined && this.$refs.tagChild[index] !== undefined) {
         this.$refs.tagChild[index].setIsOverflow()
       }
     },
     scrollLeft: function () {
-      console.log('检测到scrollLeft改变： ' + this.scrollLeft)
+      console.debug('检测到scrollLeft改变： ' + this.scrollLeft)
       // this.me.scrollLeft = this.scrollLeft
       let from = { x: this.$store.state.userVariables.prevScrollLeft, y: 0 }
       let to = { x: this.$store.state.userVariables.scrollLeft, y: 0 }
@@ -59,7 +60,7 @@ export default {
     // TweenJs 动画监听
     tween: function (from, to, duration) {
       let that = this
-      console.log('tweeen')
+      console.debug('tween')
       function animate () {
         if (TWEEN.update()) {
           requestAnimationFrame(animate)
@@ -69,7 +70,6 @@ export default {
         .to(to, duration)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function () {
-          console.log()
           that.me.scrollLeft = from.x
         }).start()
       animate()

@@ -4,25 +4,30 @@ import common from '../../api/common'
 const state = {
   menuData: [{
     'id': 100,
-    'name': 'Dashboard',
+    'name': '控制台',
+    'enName': 'Dashboard',
     'icon': 'tachometer-alt',
     'secondClass': [{
       'id': 100100,
-      'name': 'Playground'
+      'name': '练习操场',
+      'enName': 'Playground'
     }, {
       'id': 100101,
-      'name': 'NineNineEightyOne'
+      'name': '九九八十一',
+      'enName': 'NineNineEightyOne'
     }, {
       'id': 100102,
       'name': 'Members3'
     }]
   }, {
     'id': 101,
-    'name': 'Dashboard2',
-    'icon': 'tachometer-alt',
+    'name': '列表管理',
+    'enName': 'TableManagement',
+    'icon': 'table',
     'secondClass': [{
       'id': 101100,
-      'name': 'Members4'
+      'name': '查询列表',
+      'enName': 'TableList'
     }, {
       'id': 101101,
       'name': 'Members5'

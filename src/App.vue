@@ -20,10 +20,11 @@ import TopHeader from './components/layout/TopHeader'
 import ScrollBar from './components/child-components/ScrollBar'
 import Playground from './components/main-component/Playground'
 import NineNineEightyOne from './components/main-component/NineNineEightyOne'
+import TableList from './components/main-component/TableList'
 
 export default {
   name: 'App',
-  components: {ScrollBar, LeftSlider, TopHeader, Playground, NineNineEightyOne},
+  components: {ScrollBar, LeftSlider, TopHeader, Playground, NineNineEightyOne, TableList},
   data () {
     return {
       currentTabComponent: ''
@@ -34,7 +35,7 @@ export default {
   }),
   watch: {
     activatedTag: function () {
-      this.currentTabComponent = this.activatedTag.name
+      this.currentTabComponent = this.activatedTag.enName
     }
   },
   mounted: function () {

@@ -6,7 +6,7 @@
       <h1 id="h1"  class="dashboard-title">Mozx Design</h1>
     </a>
   </div>
-  <div style="height: 100%;">
+  <div style="height: 100%;" id="menu">
     <LeftSliderMenu :menudata="menudata"></LeftSliderMenu>
   </div>
 </div>
@@ -66,7 +66,7 @@ export default {
       let hto
       if (this.folderNot) {
         from = { x: 256, y: 0 }
-        to = {x: 64, y: 0}
+        to = { x: 64, y: 0 }
         hfrom = { x: 150, y: 0 }
         hto = { x: 0, y: 0 }
         this.allReady = false
